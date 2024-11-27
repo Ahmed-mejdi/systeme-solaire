@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualités Astronomiques</title>
+    <style>
+        /* Style général */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1c1c1c;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        header {
+            background: linear-gradient(to right, #1f4068, #1b1b2f);
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        header h1 {
+            color: #e0e0e0;
+            margin: 0;
+            margin-top: -50px;
+            font-size: 2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Bouton de chargement des actualités */
+        button {
+            background-color: #00adb5;
+            color: white;
+            font-size: 1rem;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            
+        }
+
+        button:hover {
+            background-color: #009f9d;
+            transform: scale(1.1);
+        }
+
+        /* Zone d'affichage des actualités */
+        #output {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(30, 30, 50, 0.9);
+            border-radius: 10px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+            text-align: left;
+        }
+        img{
+            right: 0;
+            margin-right: 1500px;
+        }
+        #output h2 {
+            font-size: 1.5rem;
+            color: #00adb5;
+            margin-bottom: 10px;
+        }
+
+        #output p {
+            font-size: 1rem;
+            color: #d6d6d6;
+            line-height: 1.5;
+        }
+
+        #output img {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        /* Animation de chargement */
+        .loading {
+            font-size: 1.2rem;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .loading:after {
+            content: '...';
+            animation: dot-blinking 1s infinite steps(5, end);
+        }
+
+        @keyframes dot-blinking {
+            50% {
+                color: transparent;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    
+    <header>
+        <div>
+            <a href="acceuil.html"><img src="arrow.png" width="50px" height="50px"><a href="acceuil.html"></a>
+</img></a>
+        </div>
+        
+        <h1>Actualités Astronomiques</h1>
+    </header>
+    
+    <!-- Bouton pour voir les actualités -->
+    <button onclick="fetchNews()">Voir les actualités astronomiques</button>
+
+    <!-- Zone où les résultats seront affichés -->
+    <div id="output">
+        <!-- Les informations sur l'actualité seront affichées ici -->
+    </div>
+
+    <script>
+        function fetchNews() {
+            // Affichage d'un message de chargement pendant la récupération des données
+            document.getElementById("output").innerHTML = `<p class="loading">Chargement des actualités</p>`;
+
+            // Nombre d'actualités à récupérer
+            const numberOfNews = 5;
+
+            // Fonction pour récupérer les actualités multiples
+            const promises = [];
+            for (let i = 0; i < numberOfNews; i++) {
+                const date = new Date();
+                const currentDate = date.toISOString().split('T')[0]; // Format YYYY-MM-DD
+                const pastDate = new Date(date.setDate(date.getDate() - i)).toISOString().split('T')[0];
+
+                promises.push(fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${pastDate}`));
+            }
+
+            // Attente de toutes les réponses
+            Promise.all(promises)
+                .then(responses => Promise.all(responses.map(res => res.json())))
+                .then(dataArray => {
+                    let htmlContent = '';
+                    dataArray.forEach(data => {
+                        htmlContent += `
+                            <h2>${data.title}</h2>
+                            <p>${data.explanation}</p>
+                            <img src="${data.url}" alt="${data.title}">
+                            <hr />
+                        `;
+                    });
+                    document.getElementById("output").innerHTML = htmlContent;
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    document.getElementById("output").innerHTML = `
+                        <p style="color: red;">Impossible de récupérer les actualités. Veuillez réessayer plus tard.</p>
+                    `;
+                });
+        }
+    </script>
+
+</body>
+</html>
