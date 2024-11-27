@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionnaire et Quiz Astronomique</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        h1 {
+            color: #2e8b57;
+        }
+
+        button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #2e8b57;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3cb371;
+        }
+
+        #output {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        /* Spinner Styles */
+        .spinner-box {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin: 20px;
+        }
+
+        .circle-border {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid #3ff9dc;
+            animation: spin 1.5s linear infinite;
+        }
+
+        .circle-core {
+            width: 60%;
+            height: 60%;
+            border-radius: 50%;
+            background-color: #1d2630;
+        }
+
+        /* Animations */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Solar System Spinner */
+        .solar-system {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .orbit {
+            position: absolute;
+            border: 1px solid #fafbfc;
+            border-radius: 50%;
+        }
+
+        .earth-orbit {
+            width: 165px;
+            height: 165px;
+            animation: spin 12s linear infinite;
+        }
+
+        .venus-orbit {
+            width: 120px;
+            height: 120px;
+            animation: spin 7.4s linear infinite;
+        }
+
+        .planet {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #3ff9dc;
+        }
+
+        .sun {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #ffab91;
+        }
+
+    </style>
+</head>
+<body>
+    <a href="acceuil.html"><img src="arrow.png" width="50px" height="50px"><a href="acceuil.html"></a>
+</img></a>
+    <h1>Bienvenue au Dictionnaire et Quiz Astronomique</h1>
+    <div id="app">
+        <button onclick="showInfo()">Rechercher des informations sur une planète</button>
+        <button onclick="startQuiz()">Participer au quiz sur l’espace</button>
+        <button onclick="fetchNews()">Voir les actualités astronomiques</button>
+    </div>
+    <div id="output"></div>
+
+    <!-- Spinner -->
+    <div class="spinner-box">
+        <div class="circle-border">
+            <div class="circle-core"></div>
+        </div>
+    </div>
+
+    <!-- Solar System Spinner -->
+    <div class="spinner-box">
+        <div class="solar-system">
+            <div class="earth-orbit orbit">
+                <div class="planet" style="top: 0;"></div>
+                <div class="venus-orbit orbit">
+                    <div class="planet" style="top: 0;"></div>
+                    <div class="sun"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const planetInfo = {
+        "Mercure": "Planète la plus proche du Soleil, petite et rocheuse avec de grandes variations de température.",
+        "Vénus": "Planète la plus chaude du système solaire, recouverte de nuages acides et de volcans.",
+        "Terre": "Notre planète, la seule connue pour abriter la vie et couverte d'eau en grande partie.",
+        "Mars": "La planète rouge, avec des montagnes, des canyons et des tempêtes de poussière géantes.",
+        "Jupiter": "La plus grande planète du système solaire, célèbre pour sa Grande Tache Rouge, une énorme tempête.",
+        "Saturne": "Connue pour ses magnifiques anneaux composés de glace et de roche.",
+        "Uranus": "Planète glaciale et inclinée sur le côté, ce qui la rend unique dans sa rotation.",
+        "Neptune": "Planète bleue et glaciale avec des vents les plus rapides du système solaire.",
+        "Pluton": "Planète naine, autrefois considérée comme la neuvième planète, composée de glace et de roche."
+    };
+
+    const quizQuestions = [
+        { question: "Quelle est la planète la plus proche du Soleil?", answer: "Mercure" },
+        { question: "Quelle est la planète la plus grande?", answer: "Jupiter" },
+        { question: "Quelle planète est connue pour ses anneaux?", answer: "Saturne" },
+        { question: "Quelle planète est appelée la planète rouge?", answer: "Mars" },
+        { question: "Quelle planète a les vents les plus rapides?", answer: "Neptune" },
+        { question: "Quelle planète est la plus chaude?", answer: "Vénus" },
+        { question: "Quelle planète est inclinée sur le côté?", answer: "Uranus" },
+        { question: "Quelle planète est composée en grande partie d'eau à sa surface?", answer: "Terre" },
+        { question: "Quelle planète naine a été déclassée en 2006?", answer: "Pluton" }
+    ];
+
+        function showInfo() {
+            const planet = prompt("Entrez le nom de la planète:");
+            if (planet) {
+                const info = planetInfo[planet] || "Information non disponible.";
+                document.getElementById("output").innerText = info;
+            }
+        }
+
+        function startQuiz() {
+            let score = 0;
+            quizQuestions.forEach(q => {
+                const userAnswer = prompt(q.question);
+                if (userAnswer && userAnswer.toLowerCase() === q.answer.toLowerCase()) {
+                    score++;
+                    alert("Correct!");
+                } else {
+                    alert(`Incorrect. La réponse correcte est ${q.answer}.`);
+                }
+            });
+            document.getElementById("output").innerText = `Votre score final est de ${score}/${quizQuestions.length}`;
+        }
+        
+        for (const [planet, info] of Object.entries(planetInfo)) {
+        console.log(`${planet}: ${info}`);
+    }
+
+        function fetchNews() {
+            fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("output").innerHTML = `
+                        <h2>${data.title}</h2>
+                        <p>${data.explanation}</p>
+                        <img src="${data.url}" alt="Astronomy Picture of the Day" style="width: 100%; max-width: 600px;"/>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    document.getElementById("output").innerText = "Impossible de récupérer les actualités.";
+                });
+        }
+    </script>
+</body>
+</html>
