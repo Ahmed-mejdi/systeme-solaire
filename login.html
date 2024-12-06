@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login and Register Page</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav>
+      <div class="nav-container">
+        <a href="planetes.html" class="logo">Planets</a>
+        <ul class="nav-links">
+          <li><a href="acceuil.html">Home</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="form-container">
+        <!-- Login Form -->
+        <div class="form active" id="login-form">
+          <h2>Login</h2>
+          <form id="login" method="post">
+            <label for="login-email">Email :</label>
+            <input type="email" id="login-email" placeholder="Email" required />
+            <label for="login-password">Password :</label>
+            <input
+              type="password"
+              id="login-password"
+              placeholder="Password"
+              required
+            />
+            <button type="submit">Login</button>
+            <p>
+              Don't have an account?
+              <span class="toggle" onclick="toggleForms()">Register</span>
+            </p>
+            <p>
+              Reset Password?
+              <a href="reset.html"> <span class="toggle">Reset</span></a>
+            </p>
+          </form>
+        </div>
+
+        <!-- Register Form -->
+        <div class="form" id="register-form">
+          <h2>Register</h2>
+          <form id="register" method="post">
+            <label for="register-name">Full Name :</label>
+            <input
+              type="text"
+              id="register-name"
+              placeholder="Full Name"
+              required
+            />
+            <label for="register-email">Email :</label>
+            <input
+              type="email"
+              id="register-email"
+              placeholder="Email"
+              required
+            />
+            <label for="register-password">Password :</label>
+            <input
+              type="password"
+              id="register-password"
+              placeholder="Password"
+              required
+            />
+            <label for="register-password">Confirm  password :</label>
+            <input
+              type="password"
+              id="register-password"
+              placeholder="Confirm  password "
+              required
+            />
+
+            <button type="submit">Register</button>
+            <p>
+              Already have an account?
+              <span class="toggle" onclick="toggleForms()">Login</span>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
